@@ -2,12 +2,12 @@
 An improper cache invalidation mechanism in the `check_size()` function located in the `http.lua` library leads to an incorrect caching of http requests.
 
 ## How to reproduce
-Run a NSE script that does a `http.get` or `http.get_url` requesting a resource of `size` > `http.max-cache-size` or `1000000` bytes by default results in the response gets cached temporarily and then when `check_size()` function is called, the contents of the cache record are set to `0`, however, the key is not removed from the cache table. 
+Run an NSE script that does a `http.get` or `http.get_url` requesting a resource of `size` > `http.max-cache-size` or `1000000` bytes by default results in the response gets cached temporarily and then when `check_size()` function is called, the contents of the cache record are set to `0`, however, the key is not removed from the cache table. 
 
 When the script is run on the next target `lookup_cache()` returns a match, with status `200` and empty content.
 The bug can also be triggered with the n-th request that exceeds the `max-cache-size`, which can be a small request.
 
-To avoid this bug one can simple increment the size `http.max-cache-size` or set the `bypass_cache` / `no_cache` options to `true` in the request.
+To avoid this bug one can simply increment the size `http.max-cache-size` or set the `bypass_cache` / `no_cache` options to `true` in the request.
 
 
 ### Impacted functions
